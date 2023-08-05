@@ -11,6 +11,5 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthorDTO {
-    private UUID uuid;
     private String name;
 }

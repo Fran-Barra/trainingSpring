@@ -11,6 +11,5 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenreDTO {
-    private UUID id;
     private String type;
 }
