@@ -1,22 +1,23 @@
 package com.training.trainingspring.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
 
 @Entity
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"book", "genre"})
+)
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Genre {
+public class BookGenres {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private String type;
+    private UUID book;
+    private UUID genre;
 }
