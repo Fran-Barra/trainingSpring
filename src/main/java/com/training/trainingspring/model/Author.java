@@ -13,7 +13,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 public class Author {
 
