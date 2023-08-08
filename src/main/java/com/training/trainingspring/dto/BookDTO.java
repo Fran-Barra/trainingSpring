@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class BookDTO {
     private String title;
-    private Year year;
+    private int bookYear;
     private UUID author;
-    private List<UUID> genre;
+    private List<UUID> genres;
 }

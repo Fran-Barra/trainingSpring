@@ -2,6 +2,9 @@ package com.training.trainingspring.controller;
 
 import com.training.trainingspring.dto.BookDTO;
 import com.training.trainingspring.model.Book;
+import com.training.trainingspring.service.interfaces.BookService;
+import lombok.val;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,26 +16,54 @@ import java.util.UUID;
 @RequestMapping("/book")
 public class BookController {
 
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {this.bookService = bookService;}
+
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks(@RequestParam(value = "complete", defaultValue = "false") boolean complete){
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        //TODO: implement complete false
+        val book = bookService.getAllBooksWithAuthor();
+        return ResponseEntity.status(HttpStatus.OK).body(book);
     }
     @PostMapping
-    public ResponseEntity<Book> postNewAuthor(@RequestBody BookDTO bookDTO){
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    public ResponseEntity<Book> postNewBook(@RequestBody BookDTO bookDTO) {
+        try {
+            Book book = bookService.createBook(bookDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(book);
+        } catch (Exception ex) {
+            if (ex instanceof ChangeSetPersister.NotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getAuthor(@PathVariable UUID id){
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    public ResponseEntity<Book> getBook(@PathVariable UUID id){
+        try {
+            val book = bookService.getBookByID(id);
+            return ResponseEntity.status(HttpStatus.OK).body(book);
+        }catch (Exception ex){
+            if (ex instanceof ChangeSetPersister.NotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateAuthor(@PathVariable UUID id, @RequestBody BookDTO bookDTO){
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    public ResponseEntity<Book> updateBook(@PathVariable UUID id, @RequestBody BookDTO bookDTO){
+        try {
+            val book = bookService.updateBook(bookDTO, id);
+            return ResponseEntity.status(HttpStatus.OK).body(book);
+        }catch (Exception ex){
+            if (ex instanceof ChangeSetPersister.NotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAuthorByID(@PathVariable UUID id){
-        return  ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    public ResponseEntity<?> deleteBookByID(@PathVariable UUID id){
+        bookService.deleteBook(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

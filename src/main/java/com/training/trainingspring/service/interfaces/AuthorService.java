@@ -24,7 +24,7 @@ public interface AuthorService {
      * A not found error will rise if the genre is not found.
      * @param authorDTO the new data
      * @param uuid the id of the author to modify
-     * @return updatedGenre
+     * @return updatedAuthor
      */
     Author updateAuthor(AuthorDTO authorDTO, UUID uuid) throws ChangeSetPersister.NotFoundException;
     /**
