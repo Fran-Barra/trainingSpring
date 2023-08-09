@@ -1,5 +1,6 @@
 package com.training.trainingspring.service;
 
+import com.training.trainingspring.dto.BookBaseDTO;
 import com.training.trainingspring.dto.BookDTO;
 import com.training.trainingspring.model.Author;
 import com.training.trainingspring.model.Book;
@@ -13,6 +14,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,8 +34,13 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        return bookRepository.findAllWithAuthorId();
+    public List<BookBaseDTO> getAllBooks() {
+        //TODO: how is this done correctly?
+        List<Book> books = bookRepository.findAll();
+        List<BookBaseDTO> bookBaseDTOList = new ArrayList<>(books.size());
+        books.forEach(b->bookBaseDTOList.add(BookBaseDTO.builder().id(b.getId()).
+                title(b.getTitle()).bookYear(b.getBookYear()).authorID(b.getAuthor().getId()).build()));
+        return bookBaseDTOList;
     }
 
     @Override

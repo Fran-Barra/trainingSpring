@@ -2,6 +2,7 @@ package com.training.trainingspring.service;
 
 
 import com.training.trainingspring.dto.AuthorDTO;
+import com.training.trainingspring.dto.BookBaseDTO;
 import com.training.trainingspring.dto.BookDTO;
 import com.training.trainingspring.dto.GenreDTO;
 import com.training.trainingspring.model.Author;
@@ -151,6 +152,28 @@ public class BookServiceTest {
     public void TestBookService_getAllBooksWithAuthor_2_Empty() {
         List<Book> books = bookService.getAllBooksWithAuthor();
         assertTrue(books.isEmpty());
+    }
+
+    @Test
+    public void TestBookService_getAllBooksWithAuthorID_1_NotEmpty() throws ChangeSetPersister.NotFoundException {
+        Author author1 = authorService.createAuthor(AuthorDTO.builder().name("Jorge").build());
+        List<UUID> genres = new ArrayList<>();
+        genres.add(genreService.createGenre(GenreDTO.builder().type("Fiction").build()).getId());
+
+
+        List<UUID> booksUUID = new ArrayList<>();
+
+        booksUUID.add(bookService.createBook(BookDTO.builder().title("Book1").
+                        bookYear(2000).author(author1.getId()).
+                        genres(genres).build())
+                .getId());
+
+
+        List<BookBaseDTO> books = bookService.getAllBooks();
+        assertEquals(books.size(), booksUUID.size());
+        List<UUID> gotUUIDs = new ArrayList<>(books.size());
+        books.forEach(b->gotUUIDs.add(b.getId()));
+        assertTrue(gotUUIDs.containsAll(booksUUID));
     }
 
     @Test

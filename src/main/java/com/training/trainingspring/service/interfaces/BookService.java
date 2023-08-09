@@ -1,5 +1,6 @@
 package com.training.trainingspring.service.interfaces;
 
+import com.training.trainingspring.dto.BookBaseDTO;
 import com.training.trainingspring.dto.BookDTO;
 import com.training.trainingspring.model.Book;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -10,9 +11,10 @@ import java.util.UUID;
 public interface BookService {
     /**
      * The method return all the existing books.
+     *
      * @return the list of books
      */
-    List<Book> getAllBooks();
+    List<BookBaseDTO> getAllBooks();
     /**
      * The method return the book with data of the author included
      * @return the list of books with author

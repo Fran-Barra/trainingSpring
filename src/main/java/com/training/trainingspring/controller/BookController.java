@@ -21,9 +21,10 @@ public class BookController {
     public BookController(BookService bookService) {this.bookService = bookService;}
 
     @GetMapping
-    public ResponseEntity<List<Book>> getAllBooks(@RequestParam(value = "complete", defaultValue = "false") boolean complete){
-        //TODO: implement complete false
-        val book = bookService.getAllBooksWithAuthor();
+    public ResponseEntity<List<?>> getAllBooks(@RequestParam(value = "complete", defaultValue = "false") boolean complete){
+        List<?> book;
+        if (complete) book = bookService.getAllBooksWithAuthor();
+        else book = bookService.getAllBooks();
         return ResponseEntity.status(HttpStatus.OK).body(book);
     }
     @PostMapping
